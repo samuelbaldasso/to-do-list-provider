@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:intl/intl.dart';
+import 'package:todo_list_flutter/app/models/task_model.dart';
 
 class Task extends StatelessWidget {
-  const Task({super.key});
-
+  Task({super.key, required this.model});
+  final TaskModel model;
+  final dateFormat = DateFormat('dd/MM/yyyy');
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       child: IntrinsicHeight(
           child: ListTile(
-        contentPadding: EdgeInsets.all(8),
+        contentPadding: const EdgeInsets.all(8),
         leading: Checkbox(
           onChanged: (value) {},
-          value: true,
+          value: model.finalizado,
         ),
         title: Text(
-          'DESCRIÇÃO DA TASK',
+          model.description,
           style: TextStyle(
-            decoration: true ? TextDecoration.lineThrough : null,
+            decoration: model.finalizado ? TextDecoration.lineThrough : null,
           ),
         ),
         subtitle: Text(
-          '20/07/2022',
+          dateFormat.format(model.datehour),
           style: TextStyle(
-            decoration: true ? TextDecoration.lineThrough : null,
+            decoration: model.finalizado ? TextDecoration.lineThrough : null,
           ),
         ),
         shape: RoundedRectangleBorder(
@@ -37,7 +40,7 @@ class Task extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
-            BoxShadow(color: Colors.grey),
+            const BoxShadow(color: Colors.grey),
           ]),
     );
   }

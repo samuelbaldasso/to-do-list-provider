@@ -11,6 +11,7 @@ class ToDoListField extends StatelessWidget {
     this.controller,
     this.validator,
     this.focusNode,
+    this.onChanged,
   })  : assert(obscure == true ? suffix == null : true,
             'Obscure text não pode ser enviado com suffix...'),
         obscureVN = ValueNotifier(obscure);
@@ -22,6 +23,7 @@ class ToDoListField extends StatelessWidget {
   final TextEditingController? controller;
   final FormFieldValidator<String>? validator;
   final FocusNode? focusNode;
+  final FunctionString onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class ToDoListField extends StatelessWidget {
         builder: (_, value, child) {
           return TextFormField(
             controller: controller,
+            onChanged: onChanged,
             validator: validator,
             focusNode: focusNode,
             decoration: InputDecoration(
@@ -60,3 +63,5 @@ class ToDoListField extends StatelessWidget {
         });
   }
 }
+
+typedef FunctionString = void Function(String)?;

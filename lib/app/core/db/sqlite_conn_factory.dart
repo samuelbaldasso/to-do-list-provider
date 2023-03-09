@@ -24,7 +24,7 @@ class SqLiteConnFactory {
     var databasePath = await getDatabasesPath();
     var databasePathFinal = join(databasePath, _database_name);
     if (_db == null) {
-      _lock.synchronized(() async {
+      await _lock.synchronized(() async {
         _db ??= await openDatabase(databasePathFinal,
             version: _version,
             onConfigure: _onConfigure,

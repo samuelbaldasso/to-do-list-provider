@@ -36,7 +36,8 @@ class _AppWidgetState extends State<AppWidget> {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('pt', 'BR')],
       title: 'ToDo List',

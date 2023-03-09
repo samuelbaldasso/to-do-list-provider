@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list_flutter/app/core/auth/auth_provider.dart';
 import 'package:todo_list_flutter/app/core/modules/to_do_list.dart';
+import 'package:todo_list_flutter/app/core/notifier/default_listener.dart';
 import 'package:todo_list_flutter/app/core/ui/my_flutter_app_icons.dart';
 import 'package:todo_list_flutter/app/core/ui/theme_extensions.dart';
 import 'package:todo_list_flutter/app/core/widget/home_drawer.dart';
@@ -11,11 +12,12 @@ import 'package:todo_list_flutter/app/core/widget/home_fliters_ui.dart';
 import 'package:todo_list_flutter/app/core/widget/home_header.dart';
 import 'package:todo_list_flutter/app/core/widget/home_tasks.dart';
 import 'package:todo_list_flutter/app/core/widget/home_week_filter.dart';
+import 'package:todo_list_flutter/app/models/task_fliter_enum.dart';
 import 'package:todo_list_flutter/app/modules/home/home_controller.dart';
 import 'package:todo_list_flutter/app/modules/tasks/tasks_module.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key, required HomeController homeController})
+  const HomePage({super.key, required HomeController homeController})
       : _homeController = homeController;
   final HomeController _homeController;
   @override
@@ -26,13 +28,22 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    widget._homeController.loadAllTasks();
+    DefaultListener(change: widget._homeController).listener(
+      context: context,
+      successCall: (notifier, listener) {
+        listener.dispose();
+      },
+    );
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      widget._homeController.loadAllTasks();
+      widget._homeController.findTasks(filter: TaskFilterEnum.today);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    void _goToCreateTask(BuildContext context) {
-      Navigator.of(context).push(
+    Future<void> _goToCreateTask(BuildContext context) async {
+      await Navigator.of(context).push(
         PageRouteBuilder(
           transitionDuration: Duration(milliseconds: 400),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -49,6 +60,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       );
+      widget._homeController.refreshPage();
     }
 
     return Scaffold(

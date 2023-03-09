@@ -15,12 +15,16 @@ class HomeController extends DefaultChangeNotifier {
     required TaskService taskService,
   }) : _taskService = taskService;
 
-  final TaskFilterEnum selected = TaskFilterEnum.today;
+  TaskFilterEnum selected = TaskFilterEnum.today;
   TotalTasks? todayTasks;
   TotalTasks? tomorrowTasks;
   TotalTasks? weekTasks;
+  List<TaskModel> allTasks = [];
+  List<TaskModel> filteredTasks = [];
+  DateTime? initialDate;
+  DateTime? selectedDay;
 
-  void loadAllTasks() async {
+  Future<void> loadAllTasks() async {
     final result = await Future.wait([
       _taskService.getToday(),
       _taskService.getTomorrow(),
@@ -30,6 +34,7 @@ class HomeController extends DefaultChangeNotifier {
     final today = result[0] as List<TaskModel>;
     final tomorrow = result[1] as List<TaskModel>;
     final week = result[2] as WeekTask;
+
     todayTasks = TotalTasks(
         total: today.length,
         totalFinished: today.where((element) => element.finalizado).length);
@@ -42,6 +47,57 @@ class HomeController extends DefaultChangeNotifier {
         total: week.models.length,
         totalFinished:
             week.models.where((element) => element.finalizado).length);
+
+    notifyListeners();
+  }
+
+  Future<void> findTasks({required TaskFilterEnum filter}) async {
+    selected = filter;
+    showLoading();
+    notifyListeners();
+    List<TaskModel> tasks = [];
+
+    switch (filter) {
+      case TaskFilterEnum.today:
+        tasks = await _taskService.getToday();
+        break;
+      case TaskFilterEnum.tomorrow:
+        tasks = await _taskService.getTomorrow();
+        break;
+      case TaskFilterEnum.week:
+        final weekModel = await _taskService.getWeek();
+        initialDate = weekModel.start;
+        tasks = weekModel.models;
+        break;
+      default:
+    }
+    filteredTasks = tasks;
+    allTasks = tasks;
+
+    if (filter == TaskFilterEnum.week) {
+      if (selectedDay != null) {
+        filterByDay(selectedDay!);
+      } else if (initialDate != null) {
+        filterByDay(initialDate!);
+      }
+    } else {
+      selectedDay = null;
+    }
+
+    hideLoading();
+    notifyListeners();
+  }
+
+  Future<void> refreshPage() async {
+    await findTasks(filter: selected);
+    await loadAllTasks();
+    notifyListeners();
+  }
+
+  void filterByDay(DateTime date) {
+    selectedDay = date;
+    filteredTasks =
+        allTasks.where((task) => task.datehour == selectedDay).toList();
 
     notifyListeners();
   }
