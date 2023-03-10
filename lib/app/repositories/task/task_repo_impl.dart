@@ -34,9 +34,9 @@ class TaskRepoImpl implements TaskRepo {
     );
 
     final endFilter = DateTime(
-      start.year,
-      start.month,
-      start.day,
+      end.year,
+      end.month,
+      end.day,
       23,
       59,
       59,
@@ -48,5 +48,26 @@ class TaskRepoImpl implements TaskRepo {
         [startFilter.toIso8601String(), endFilter.toIso8601String()]);
 
     return result.map((e) => TaskModel.loadFromDB(e)).toList();
+  }
+
+  @override
+  Future<void> checkOrUncheckTask(TaskModel task) async {
+    final conn = await _sqLiteConnFactory.openConn();
+    final finished = task.finalizado ? 1 : 0;
+
+    await conn.rawUpdate(
+        "update todo set finalizado = ? where id = ?", [finished, task.id]);
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    final conn = await _sqLiteConnFactory.openConn();
+    await conn.delete("todo");
+  }
+
+  @override
+  Future<void> deleteById(int id) async {
+    final conn = await _sqLiteConnFactory.openConn();
+    await conn.rawDelete("delete from todo where id = ?", [id]);
   }
 }

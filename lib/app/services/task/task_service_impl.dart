@@ -50,4 +50,19 @@ class TaskServiceImpl implements TaskService {
     final tasks = await _taskRepo.findByPeriod(startFilter, endFilter);
     return WeekTask(start: startFilter, end: endFilter, models: tasks);
   }
+
+  @override
+  Future<void> checkOrUncheckTask(TaskModel task) async {
+    _taskRepo.checkOrUncheckTask(task);
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    _taskRepo.deleteAll();
+  }
+
+  @override
+  Future<void> deleteById(int id) async {
+    _taskRepo.deleteById(id);
+  }
 }

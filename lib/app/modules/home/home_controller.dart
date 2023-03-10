@@ -23,6 +23,7 @@ class HomeController extends DefaultChangeNotifier {
   List<TaskModel> filteredTasks = [];
   DateTime? initialDate;
   DateTime? selectedDay;
+  bool showFinishingTasks = false;
 
   Future<void> loadAllTasks() async {
     final result = await Future.wait([
@@ -84,6 +85,11 @@ class HomeController extends DefaultChangeNotifier {
       selectedDay = null;
     }
 
+    if (!showFinishingTasks) {
+      filteredTasks =
+          filteredTasks.where((element) => !element.finalizado).toList();
+    }
+
     hideLoading();
     notifyListeners();
   }
@@ -99,5 +105,28 @@ class HomeController extends DefaultChangeNotifier {
     filteredTasks = allTasks.where((task) => task.datehour == date).toList();
 
     notifyListeners();
+  }
+
+  Future<void> checkOrUncheckTask(TaskModel model) async {
+    showLoadingAndReset();
+    notifyListeners();
+
+    final taskUpdate = model.copyWith(finalizado: !model.finalizado);
+    await _taskService.checkOrUncheckTask(taskUpdate);
+    hideLoading();
+    refreshPage();
+  }
+
+  void showOrHideFinishingTasks() {
+    showFinishingTasks = !showFinishingTasks;
+    refreshPage();
+  }
+
+  Future<void> deleteById(int id) async {
+    showLoadingAndReset();
+    notifyListeners();
+    await _taskService.deleteById(id);
+    hideLoading();
+    refreshPage();
   }
 }
