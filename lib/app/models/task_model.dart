@@ -19,4 +19,18 @@ class TaskModel {
         datehour: DateTime.parse(task['datahora']),
         finalizado: task['finalizado'] == 1);
   }
+
+  TaskModel copyWith({
+    int? id,
+    String? description,
+    DateTime? datehour,
+    bool? finalizado,
+  }) {
+    return TaskModel(
+      id: id ?? this.id,
+      description: description ?? this.description,
+      datehour: datehour ?? this.datehour,
+      finalizado: finalizado ?? this.finalizado,
+    );
+  }
 }

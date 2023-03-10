@@ -13,8 +13,9 @@ class HomeWeekFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: context.select<HomeController, bool>(
-          (value) => value.selected == TaskFilterEnum.week),
+      visible: context.select<HomeController, TaskFilterEnum>(
+              (value) => value.selected) ==
+          TaskFilterEnum.week,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

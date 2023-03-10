@@ -1,4 +1,8 @@
-enum TaskFilterEnum { today, tomorrow, week }
+enum TaskFilterEnum {
+  today,
+  tomorrow,
+  week,
+}
 
 extension TaskFilterDescription on TaskFilterEnum {
   String get description {

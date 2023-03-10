@@ -43,7 +43,7 @@ class ToDoCardFilter extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           // SizedBox(height: 21, width: 21, child: CircularProgressIndicator(),),
           Text(
-            '${tasksModel?.total} TASKS',
+            '${tasksModel?.total ?? 0} TASKS',
             style: context.titleStyle.copyWith(
               fontSize: 10,
               color: selected ? Colors.white : Colors.grey,
