@@ -37,8 +37,9 @@ class HomeController extends DefaultChangeNotifier {
     final week = result[2] as WeekTask;
 
     todayTasks = TotalTasks(
-        total: today.length,
-        totalFinished: today.where((element) => element.finalizado).length);
+      total: today.length,
+      totalFinished: today.where((element) => element.finalizado).length,
+    );
 
     tomorrowTasks = TotalTasks(
         total: tomorrow.length,
@@ -85,12 +86,11 @@ class HomeController extends DefaultChangeNotifier {
       selectedDay = null;
     }
 
+    hideLoading();
     if (!showFinishingTasks) {
       filteredTasks =
           filteredTasks.where((element) => !element.finalizado).toList();
     }
-
-    hideLoading();
     notifyListeners();
   }
 
@@ -102,7 +102,13 @@ class HomeController extends DefaultChangeNotifier {
 
   void filterByDay(DateTime date) {
     selectedDay = date;
-    filteredTasks = allTasks.where((task) => task.datehour == date).toList();
+    filteredTasks = allTasks.where((task) {
+      if (showFinishingTasks) {
+        return task.datehour == date;
+      } else {
+        return task.datehour == date && !task.finalizado;
+      }
+    }).toList();
 
     notifyListeners();
   }
@@ -122,10 +128,10 @@ class HomeController extends DefaultChangeNotifier {
     refreshPage();
   }
 
-  Future<void> deleteById(int id) async {
+  Future<void> deleteTask(TaskModel task) async {
     showLoadingAndReset();
     notifyListeners();
-    await _taskService.deleteById(id);
+    await _taskService.deleteById(task.id);
     hideLoading();
     refreshPage();
   }

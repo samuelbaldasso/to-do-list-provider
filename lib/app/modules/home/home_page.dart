@@ -13,11 +13,12 @@ import 'package:todo_list_flutter/app/core/widget/home_header.dart';
 import 'package:todo_list_flutter/app/core/widget/home_tasks.dart';
 import 'package:todo_list_flutter/app/core/widget/home_week_filter.dart';
 import 'package:todo_list_flutter/app/models/task_fliter_enum.dart';
+import 'package:todo_list_flutter/app/models/task_model.dart';
 import 'package:todo_list_flutter/app/modules/home/home_controller.dart';
 import 'package:todo_list_flutter/app/modules/tasks/tasks_module.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required HomeController homeController})
+  HomePage({super.key, required HomeController homeController})
       : _homeController = homeController;
   final HomeController _homeController;
   @override

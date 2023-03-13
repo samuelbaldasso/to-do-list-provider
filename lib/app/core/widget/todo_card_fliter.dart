@@ -43,7 +43,7 @@ class ToDoCardFilter extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           // SizedBox(height: 21, width: 21, child: CircularProgressIndicator(),),
           Text(
-            '${tasksModel?.total ?? 0} TASKS',
+            '${_getSubtract()} TASKS',
             style: context.titleStyle.copyWith(
               fontSize: 10,
               color: selected ? Colors.white : Colors.grey,
@@ -82,5 +82,12 @@ class ToDoCardFilter extends StatelessWidget {
     }
     final percent = (totalFinished * 100) / total;
     return percent / 100;
+  }
+
+  int _getSubtract() {
+    final total = tasksModel?.total ?? 0;
+    final totalFinished = tasksModel?.totalFinished ?? 0;
+    final totalFinal = total - totalFinished;
+    return totalFinal;
   }
 }

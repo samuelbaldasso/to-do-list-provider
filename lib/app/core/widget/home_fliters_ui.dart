@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_list_flutter/app/core/ui/theme_extensions.dart';
 import 'package:todo_list_flutter/app/core/widget/todo_card_fliter.dart';
 import 'package:todo_list_flutter/app/models/task_fliter_enum.dart';
+import 'package:todo_list_flutter/app/models/task_model.dart';
 import 'package:todo_list_flutter/app/models/total_tasks.dart';
 import 'package:todo_list_flutter/app/modules/home/home_controller.dart';
 

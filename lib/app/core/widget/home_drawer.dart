@@ -5,6 +5,8 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list_flutter/app/core/ui/messages.dart';
 import 'package:todo_list_flutter/app/core/ui/theme_extensions.dart';
+import 'package:todo_list_flutter/app/modules/home/home_controller.dart';
+import 'package:todo_list_flutter/app/services/task/task_service.dart';
 import 'package:todo_list_flutter/app/services/user/user_service.dart';
 
 import '../auth/auth_provider.dart';
@@ -92,7 +94,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
         ),
         ListTile(
-          onTap: () => context.read<AuthProvider>().logout(),
+          onTap: () {
+            context.read<AuthProvider>().logout();
+            context.read<TaskService>().deleteAll();
+          },
           title: Text('Logout'),
         ),
       ]),

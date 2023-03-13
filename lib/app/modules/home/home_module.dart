@@ -11,7 +11,9 @@ import 'package:todo_list_flutter/app/services/task/task_service_impl.dart';
 class HomeModule extends ToDoListModule {
   HomeModule()
       : super(routers: {
-          '/home': (context) => HomePage(homeController: context.read()),
+          '/home': (context) => HomePage(
+                homeController: context.read(),
+              ),
         }, bindings: [
           Provider<TaskRepo>(
             create: (context) =>
